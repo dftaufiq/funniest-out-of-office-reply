@@ -23,3 +23,9 @@ if written != LINE:
         f"entry.txt verification failed: read back {len(written)} chars, "
         f"expected {len(LINE)} chars identical to the entry line"
     )
+
+# Byte check: the tie-break counts bytes, so confirm the file on disk is
+# exactly the entry's UTF-8 bytes — no trailing newline, no BOM.
+if os.path.getsize(entry_path) != len(LINE.encode("utf-8")):
+    raise SystemExit("entry.txt byte length does not match the entry line")
+print(f"wrote {len(LINE)} chars / {len(LINE.encode('utf-8'))} bytes to {entry_path}")
